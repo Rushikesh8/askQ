@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Questions</h1>
+<ul>
+    {% for question in questions %}
+        <li>
+            <h3>{{ question.title }}</h3>
+            <p>{{ question.content }}</p>
+            <p>Posted by: {{ question.user.username }}</p>
+            <h3>Answers:</h3>
+            {% for answer in question.answer_set.all %}
+              <p>{{ answer.content }}</p>
+              
+              <form method="post" action="{% url 'like-answer' question.id %}">
+                  {% csrf_token %}
+                  <button type="submit">Like</button>
+              </form>
+              {% if answer.likes.count %}
+              <p>Likes: {{ answer.likes.count }}</p>
+              {% else %}
+              <p>Likes: 0</p>
+              {% endif %}
+            {% endfor %}
+            <a href="{% url 'answer-question' question.id %}">Answer</a>
+
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}

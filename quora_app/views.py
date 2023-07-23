@@ -77,9 +77,7 @@ def like_answer(request, answer_id):
         answer.likes.remove(request.user)
     else:
         answer.likes.add(request.user)
-
     request.user.refresh_from_db()
-
     return redirect('questions')
 
 def custom_logout(request):
@@ -88,8 +86,6 @@ def custom_logout(request):
 
 @login_required
 def user_profile(request):
-    # if not request.user.is_authenticated:
-    #     return redirect('login')
     question_asked = filter_question(user=request.user).count()
     answered = filter_answer(user=request.user).count()
     return render(request, 'profile.html', {'question_asked': question_asked, 'answered': answered})

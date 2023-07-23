@@ -3,7 +3,8 @@ from django.db.models import Q
 from quora_app.forms import CustomSignupForm,CustomLoginForm,QuestionForm,AnswerForm
 from django.contrib.auth import login, authenticate,logout
 from django.contrib import messages
-from quora_app.dbapi import get_all_questions,get_answer,get_question,filter_answer
+from quora_app.dbapi import get_all_questions,get_answer,get_question,filter_answer,filter_question
+from django.contrib.auth.decorators import login_required
 
 def custom_signup(request):
     if request.method == 'POST':
@@ -32,9 +33,8 @@ def custom_login(request):
         form = CustomLoginForm()
     return render(request, 'login.html', {'form': form})
 
+@login_required
 def question_list(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
     query = request.GET.get('search',"")
     questions = get_all_questions().filter(Q(title__icontains=query)).order_by('-id')
     answers_liked = list()
@@ -42,10 +42,8 @@ def question_list(request):
         answers_liked = filter_answer(likes=request.user)
     return render(request, 'questions.html', {'questions': questions,"answers_liked":answers_liked})
 
-
+@login_required
 def post_question(request):
-    if not request.user.is_authenticated:
-        return redirect('login')
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
@@ -57,9 +55,8 @@ def post_question(request):
         form = QuestionForm()
     return render(request, 'post_question.html', {'form': form})
 
+@login_required
 def answer_question(request, question_id):
-    if not request.user.is_authenticated:
-        return redirect('login')
     question = get_question(id=question_id)
     if request.method == 'POST':
         form = AnswerForm(request.POST)
@@ -73,9 +70,8 @@ def answer_question(request, question_id):
         form = AnswerForm()
     return render(request, 'answer.html', {'form': form, 'question': question})
 
+@login_required
 def like_answer(request, answer_id):
-    if not request.user.is_authenticated:
-        return redirect('login')
     answer = get_answer(id=answer_id)
     if request.user in answer.likes.all():
         answer.likes.remove(request.user)
@@ -89,5 +85,14 @@ def like_answer(request, answer_id):
 def custom_logout(request):
     logout(request)
     return redirect('login')
+
+@login_required
+def user_profile(request):
+    # if not request.user.is_authenticated:
+    #     return redirect('login')
+    question_asked = filter_question(user=request.user).count()
+    answered = filter_answer(user=request.user).count()
+    return render(request, 'profile.html', {'question_asked': question_asked, 'answered': answered})
+
 
 

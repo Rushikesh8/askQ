@@ -6,7 +6,8 @@ from quora_app.views import (custom_signup,
                              post_question,
                              answer_question,
                              like_answer,
-                             custom_logout)
+                             custom_logout,
+                             user_profile)
 
 def redirect_to_login(request):
     return redirect('/login/')
@@ -20,4 +21,5 @@ urlpatterns = [
     path('answer-question/<int:question_id>/', answer_question, name='answer-question'),
     path('like-answer/<int:answer_id>/', like_answer, name='like-answer'),
     path('logout/', custom_logout, name='logout'),
+    path('user-profile/', user_profile, name='user-profile'),
  ]

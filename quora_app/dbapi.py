@@ -9,3 +9,6 @@ def get_question(*args,**kwargs) -> Question:
 
 def get_answer(*args,**kwargs) -> Answer:
     return Answer.objects.get(*args,**kwargs)
+
+def filter_answer(*args,**kwargs) -> QuerySet:
+    return Answer.objects.filter(*args,**kwargs)

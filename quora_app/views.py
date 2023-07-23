@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect
+from django.db.models import Q
 from quora_app.forms import CustomSignupForm,CustomLoginForm,QuestionForm,AnswerForm
 from django.contrib.auth import login, authenticate,logout
 from django.contrib.auth.decorators import login_required
-from quora_app.dbapi import get_all_questions,get_answer,get_question
+from quora_app.dbapi import get_all_questions,get_answer,get_question,filter_answer
 
 def custom_signup(request):
     if request.method == 'POST':
@@ -29,13 +30,20 @@ def custom_login(request):
         form = CustomLoginForm()
     return render(request, 'login.html', {'form': form})
 
-@login_required
 def question_list(request):
-    questions = get_all_questions()
-    return render(request, 'questions.html', {'questions': questions})
+    if not request.user.is_authenticated:
+        return redirect('login')
+    query = request.GET.get('search',"")
+    questions = get_all_questions().filter(Q(title__icontains=query)).order_by('-id')
+    answers_liked = list()
+    if request.user.is_authenticated:
+        answers_liked = filter_answer(likes=request.user)
+    return render(request, 'questions.html', {'questions': questions,"answers_liked":answers_liked})
 
-@login_required
+
 def post_question(request):
+    if not request.user.is_authenticated:
+        return redirect('login')
     if request.method == 'POST':
         form = QuestionForm(request.POST)
         if form.is_valid():
@@ -47,8 +55,9 @@ def post_question(request):
         form = QuestionForm()
     return render(request, 'post_question.html', {'form': form})
 
-@login_required
 def answer_question(request, question_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     question = get_question(id=question_id)
     if request.method == 'POST':
         form = AnswerForm(request.POST)
@@ -62,10 +71,17 @@ def answer_question(request, question_id):
         form = AnswerForm()
     return render(request, 'answer.html', {'form': form, 'question': question})
 
-@login_required
 def like_answer(request, answer_id):
+    if not request.user.is_authenticated:
+        return redirect('login')
     answer = get_answer(id=answer_id)
-    answer.likes.add(request.user)
+    if request.user in answer.likes.all():
+        answer.likes.remove(request.user)
+    else:
+        answer.likes.add(request.user)
+
+    request.user.refresh_from_db()
+
     return redirect('questions')
 
 def custom_logout(request):

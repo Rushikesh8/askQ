@@ -18,7 +18,7 @@ class CustomLoginForm(forms.Form):
 class QuestionForm(forms.ModelForm):
     class Meta:
         model = Question
-        fields = ['title', 'content']
+        fields = ['title']
 
 class AnswerForm(forms.ModelForm):
     class Meta:

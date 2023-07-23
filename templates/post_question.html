@@ -1,10 +1,17 @@
 {% extends 'base.html' %}
+{% load tailwind_filters %}
 
 {% block content %}
-<h1>Post a Question</h1>
+<div class="w-1/3 py-4 px-8 bg-white shadow-lg rounded-lg mx-auto">
+<h1 class="font-bold text-cyan-600 text-3xl text-center mb-8">Curiosity on overdrive? Unleash your question!</h1>
 <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Post</button>
+    {{ form | crispy }}
+    <button
+    class="flex w-full mt-10 mb-4 justify-center rounded-md  border-transparent bg-cyan-500 py-2 px-4 text-sm  text-white shadow-sm hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 font-semibold"
+    type="submit">
+    Post
+    </button>
 </form>
+</div>
 {% endblock %}

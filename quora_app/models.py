@@ -9,7 +9,7 @@ class BaseModel(models.Model):
 
 class Question(BaseModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    title = models.CharField(max_length=300)
+    title = models.CharField(max_length=500)
     content = models.TextField()
 
 class Answer(BaseModel):

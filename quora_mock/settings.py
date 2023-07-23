@@ -38,8 +38,16 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'quora_app'
+    'quora_app',
+    "crispy_forms",
+    "crispy_tailwind"
 ]
+
+# Tailwind Config
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "tailwind"
+
+CRISPY_TEMPLATE_PACK = "tailwind"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -116,6 +124,8 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
+
+LOGIN_REDIRECT_URL = 'login/'
 
 REPOSITORY_ROOT = os.path.dirname(BASE_DIR)
 STATIC_ROOT = os.path.join(REPOSITORY_ROOT,"static/")

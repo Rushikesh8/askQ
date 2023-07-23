@@ -4,7 +4,7 @@ askQ is a Quora-inspired Question and Answer (Q&A) platform built using Django. 
 
 ## Installation
 
-To run the Capital Quiz(Backend) locally, follow these steps:
+To run the askQ locally, follow these steps:
 
 1. Clone the repository:
 

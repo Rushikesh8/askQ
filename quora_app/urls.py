@@ -1,4 +1,5 @@
 from django.urls import path
+from django.shortcuts import redirect
 from quora_app.views import (custom_signup,
                              custom_login,
                              question_list,
@@ -6,7 +7,12 @@ from quora_app.views import (custom_signup,
                              answer_question,
                              like_answer,
                              custom_logout)
+
+def redirect_to_login(request):
+    return redirect('/login/')
+
 urlpatterns = [
+    path('', redirect_to_login),
     path('signup/', custom_signup, name='signup'),
     path('login/', custom_login, name='login'),
     path('questions/', question_list, name='questions'),

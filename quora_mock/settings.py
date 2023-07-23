@@ -21,12 +21,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-8*8mf93^y)@u68z4s&c)qqt_$i#wtjtw5^q578fbe0w_=&xqq-'
+SECRET_KEY = os.environ.get('DJANGO_SECERT_KEY','DummyKey')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG =  os.environ.get('DEBUG',True)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["*"]
 
 
 # Application definition
@@ -137,3 +137,16 @@ MEDIA_ROOT = os.path.join(REPOSITORY_ROOT,'media/')
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# #Flash try:
+# try:
+#     from django.contrib.messages import constants as messages
+#     MESSAGE_TAGS = {
+#         messages.DEBUG: 'alert-info',
+#         messages.INFO: 'alert-info',
+#         messages.SUCCESS: 'alert-success',
+#         messages.WARNING: 'alert-warning',
+#         messages.ERROR: 'alert-danger',
+#     }
+# except Exception as e:
+#     pass

@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.db.models import Q
 from quora_app.forms import CustomSignupForm,CustomLoginForm,QuestionForm,AnswerForm
 from django.contrib.auth import login, authenticate,logout
-from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from quora_app.dbapi import get_all_questions,get_answer,get_question,filter_answer
 
 def custom_signup(request):
@@ -26,6 +26,8 @@ def custom_login(request):
             if user:
                 login(request, user)
                 return redirect('questions')
+            else:
+                messages.error(request, "Error: Invalid Username or Password")
     else:
         form = CustomLoginForm()
     return render(request, 'login.html', {'form': form})
